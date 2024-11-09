@@ -78,11 +78,55 @@ class TestFileStorage(unittest.TestCase):
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_all_no_class(self):
         """Test that all returns all rows when no class is passed"""
+        storage = DBStorage()
+        obj = storage.all()
+        self.assertEqual(type(obj), dict)
+        self.assertIs(obj, storage.all())
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_new(self):
         """test that new adds an object to the database"""
+        storage = DBStorage()
+        obj = storage.all(State)
+        state = State(name="Oklahoma")
+        state.save()
+        self.assertIsNot(obj, storage.all(State))
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_save(self):
         """Test that save properly saves objects to file.json"""
+        storage = DBStorage()
+        obj = storage.all(State)
+        state = State(name="Oklahoma")
+        state.save()
+        storage.save()
+        storage.reload()
+        self.assertIsNot(obj, storage.all(State))
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_get(self):
+        """Test that get retrieves one object"""
+        storage = DBStorage()
+        state = State(name="Oklahoma")
+        state.save()
+        obj = storage.get(State, state.id)
+        self.assertEqual(obj, state)
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_count(self):
+        """Test that count counts the number of objects in storage"""
+        storage = DBStorage()
+        state = State(name="Oklahoma")
+        state.save()
+        count = storage.count(State)
+        self.assertEqual(count, 1)
+        storage.save()
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_delete(self):
+        """Test that delete deletes an object from storage"""
+        storage = DBStorage()
+        state = State(name="Oklahoma")
+        state.save()
+        storage.delete(state)
+        self.assertIsNone(storage.get(State, state.id))
