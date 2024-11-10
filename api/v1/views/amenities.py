@@ -15,10 +15,10 @@ def get_all_amenities():
     """
     retrieves list of all Amenity objects
     """
-    amenities_json = []
+    amenities = []
     for amenity in storage.all(Amenity).values():
-        amenities_json.append(amenity.to_dict())
-        return jsonify(amenities_json)
+        amenities.append(amenity.to_dict())
+    return jsonify(amenities)
 
 
 @app_views.route("/amenities/<amenity_id>", methods=["GET"],
