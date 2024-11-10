@@ -40,8 +40,8 @@ class TestDBStorageDocs(unittest.TestCase):
     def test_pep8_conformance_test_db_storage(self):
         """Test tests/test_models/test_db_storage.py conforms to PEP8."""
         pep8s = pep8.StyleGuide(quiet=True)
-        result = pep8s.check_files(['tests/test_models/test_engine/\
-test_db_storage.py'])
+        result = pep8s.check_files(['tests/test_models/ \
+                                    test_engine/test_db_storage.py'])
         self.assertEqual(result.total_errors, 0,
                          "Found code style errors (and warnings).")
 
@@ -67,34 +67,40 @@ test_db_storage.py'])
             self.assertTrue(len(func[1].__doc__) >= 1,
                             "{:s} method needs a docstring".format(func[0]))
 
-
-class TestFileStorage(unittest.TestCase):
-    """Test the FileStorage class"""
-    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+@unittest.skipIf(models.storage_t != 'db', "test designed for file storage")
+class TestDBStorage(unittest.TestCase):
+    """
+    Testing the DBStorage class and its methods
+    """
     def test_all_returns_dict(self):
-        """Test that all returns a dictionaty"""
+        """
+        Test that 'all' returns the FileStorage __objects dictionary
+        """
         self.assertIs(type(models.storage.all()), dict)
 
-    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_all_no_class(self):
-        """Test that all returns all rows when no class is passed"""
+        """
+        Test that 'all' returns all rows when no class is passed
+        """
         storage = DBStorage()
         obj = storage.all()
         self.assertEqual(type(obj), dict)
         self.assertIs(obj, storage.all())
 
-    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_new(self):
-        """test that new adds an object to the database"""
+        """
+        Test that 'new' adds an object to the database
+        """
         storage = DBStorage()
         obj = storage.all(State)
         state = State(name="Oklahoma")
         state.save()
         self.assertIsNot(obj, storage.all(State))
 
-    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_save(self):
-        """Test that save properly saves objects to file.json"""
+        """
+        Test that 'save; properly saves objects to file.json
+        """
         storage = DBStorage()
         obj = storage.all(State)
         state = State(name="Oklahoma")
@@ -103,18 +109,20 @@ class TestFileStorage(unittest.TestCase):
         storage.reload()
         self.assertIsNot(obj, storage.all(State))
 
-    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_get(self):
-        """Test that get retrieves one object"""
+        """
+        Test that 'get' retrieves one object from storage
+        """
         storage = DBStorage()
         state = State(name="Oklahoma")
         state.save()
         obj = storage.get(State, state.id)
         self.assertEqual(obj, state)
 
-    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_count(self):
-        """Test that count counts the number of objects in storage"""
+        """
+        Test that 'count' counts the number of objects in storage
+        """
         storage = DBStorage()
         state = State(name="Oklahoma")
         state.save()
@@ -122,9 +130,10 @@ class TestFileStorage(unittest.TestCase):
         self.assertEqual(count, 1)
         storage.save()
 
-    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_delete(self):
-        """Test that delete deletes an object from storage"""
+        """
+        Test that 'delete' deletes an object from storage
+        """
         storage = DBStorage()
         state = State(name="Oklahoma")
         state.save()

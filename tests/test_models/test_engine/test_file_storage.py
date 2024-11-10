@@ -68,19 +68,24 @@ test_file_storage.py'])
                             "{:s} method needs a docstring".format(func[0]))
 
 
+@unittest.skipIf(models.storage_t == "db", "test designed for db storage")
 class TestFileStorage(unittest.TestCase):
-    """Test the FileStorage class"""
-    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    """
+    Tests the FileStorage class methods and attributes
+    """
     def test_all_returns_dict(self):
-        """Test that all returns the FileStorage.__objects attr"""
+        """
+        Test that 'all' returns the FileStorage.__objects attr
+        """
         storage = FileStorage()
         new_dict = storage.all()
         self.assertEqual(type(new_dict), dict)
         self.assertIs(new_dict, storage._FileStorage__objects)
 
-    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
     def test_new(self):
-        """test that new adds an object to the FileStorage.__objects attr"""
+        """
+        Test that 'new' adds an object to the FileStorage.__objects attr
+        """
         storage = FileStorage()
         save = FileStorage._FileStorage__objects
         FileStorage._FileStorage__objects = {}
@@ -94,9 +99,10 @@ class TestFileStorage(unittest.TestCase):
                 self.assertEqual(test_dict, storage._FileStorage__objects)
         FileStorage._FileStorage__objects = save
 
-    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
     def test_save(self):
-        """Test that save properly saves objects to file.json"""
+        """
+        Test that 'save' properly saves objects to file.json
+        """
         storage = FileStorage()
         new_dict = {}
         for key, value in classes.items():
@@ -114,9 +120,10 @@ class TestFileStorage(unittest.TestCase):
             js = f.read()
         self.assertEqual(json.loads(string), json.loads(js))
 
-    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
     def test_reload(self):
-        """Test that reload properly loads objects from file.json"""
+        """
+        Test that 'reload' properly loads objects from file.json
+        """
         storage = FileStorage()
         new_dict = {}
         for key, value in classes.items():
@@ -130,9 +137,10 @@ class TestFileStorage(unittest.TestCase):
         for key, value in new_dict.items():
             self.assertTrue(value == storage._FileStorage__objects[key])
 
-    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
     def test_delete(self):
-        """Test that delete properly deletes objects from __objects"""
+        """
+        Test that 'delete' properly deletes objects from __objects
+        """
         storage = FileStorage()
         new_dict = {}
         for key, value in classes.items():
@@ -145,9 +153,10 @@ class TestFileStorage(unittest.TestCase):
         self.assertNotIn(instance_key, storage._FileStorage__objects)
         FileStorage._FileStorage__objects = save
 
-    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
     def test_get(self):
-        """Test that get retrieves one object"""
+        """
+        Test that 'get' retrieves one object from __objects
+        """
         storage = FileStorage()
         new_dict = {}
         for key, value in classes.items():
@@ -160,9 +169,10 @@ class TestFileStorage(unittest.TestCase):
             self.assertTrue(value == storage.get(value.__class__, value.id))
         FileStorage._FileStorage__objects = save
 
-    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
     def test_count(self):
-        """Test that count counts the number of objects in storage"""
+        """
+        Test that 'count' counts the number of objects in storage
+        """
         storage = FileStorage()
         new_dict = {}
         for key, value in classes.items():
@@ -181,4 +191,3 @@ class TestFileStorage(unittest.TestCase):
         FileStorage._FileStorage__objects = save
         self.assertEqual(storage.count(value), 0)
         self.assertEqual(storage.count(None), len(new_dict))
-            
