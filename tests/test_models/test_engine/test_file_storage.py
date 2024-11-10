@@ -149,35 +149,23 @@ class TestFileStorage(unittest.TestCase):
     def test_get(self):
         """Test that get retrieves one object"""
         storage = FileStorage()
-        new_dict = {}
-        for key, value in classes.items():
-            instance = value()
-            instance_key = instance.__class__.__name__ + "." + instance.id
-            new_dict[instance_key] = instance
-        save = FileStorage._FileStorage__objects
-        FileStorage._FileStorage__objects = new_dict
-        for key, value in new_dict.items():
-            self.assertTrue(value == storage.get(value.__class__, value.id))
-        FileStorage._FileStorage__objects = save
+        instance = State(name="Oklahoma")
+        instance.save()
+        got_instance = storage.get(State, instance.id)
+        self.assertEqual(instance, got_instance)
+        storage.delete(instance)
 
     @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
     def test_count(self):
         """Test that count counts the number of objects in storage"""
         storage = FileStorage()
-        new_dict = {}
-        for key, value in classes.items():
-            instance = value()
-            instance_key = instance.__class__.__name__ + "." + instance.id
-            new_dict[instance_key] = instance
-        save = FileStorage._FileStorage__objects
-        FileStorage._FileStorage__objects = new_dict
-        self.assertEqual(storage.count(), len(new_dict))
-        FileStorage._FileStorage__objects = save
-        for key, value in classes.items():
-            instance = value()
-            instance_key = instance.__class__.__name__ + "." + instance.id
-            new_dict[instance_key] = instance
-        self.assertEqual(storage.count(value), 1)
-        FileStorage._FileStorage__objects = save
-        self.assertEqual(storage.count(value), 0)
-        self.assertEqual(storage.count(None), len(new_dict))
+        initial_count = storage.count()
+
+        state_instance = State(name="Oklahoma")
+        state_instance.save()
+        self.assertEqual(storage.count(State), initial_count + 1)
+
+        self.assertEqual(storage.count(), initial_count + 1)
+
+        storage.delete(state_instance)
+        self.assertEqual(storage.count(State), initial_count)
