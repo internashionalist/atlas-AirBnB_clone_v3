@@ -55,13 +55,20 @@ def post_user():
     """
     creates a User object
     """
-    if not request.get_json():
+    if not request.is_json:
         abort(400, "Not a JSON")
-    if "email" not in request.get_json():
+
+    data = request.get_json()
+    if data is None:
+        abort(400, "Not a JSON")
+
+    if "email" not in data:
         abort(400, "Missing email")
-    if "password" not in request.get_json():
+
+    if "password" not in data:
         abort(400, "Missing password")
-    user = User(**request.get_json())
+
+    user = User(**data)
     user.save()
     return jsonify(user.to_dict()), 201
 
@@ -75,10 +82,17 @@ def put_user(user_id):
     user = storage.get(User, user_id)
     if not user:
         abort(404)
-    if not request.get_json():
+
+    if not request.is_json:
         abort(400, "Not a JSON")
-    for key, value in request.get_json().items():
+
+    data = request.get_json()
+    if data is None:
+        abort(400, "Not a JSON")
+
+    for key, value in data.items():
         if key not in ["id", "email", "created_at", "updated_at"]:
             setattr(user, key, value)
+
     user.save()
     return jsonify(user.to_dict())
