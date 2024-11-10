@@ -19,10 +19,10 @@ classes = {"Amenity": Amenity,
            "BaseModel": BaseModel,
            "City": City,
            "Place": Place,
-           "Review": Review, 
-            "State": State,
-            "User": User
-            }
+           "Review": Review,
+           "State": State,
+           "User": User
+           }
 
 
 class HBNBCommand(cmd.Cmd):
@@ -62,11 +62,11 @@ class HBNBCommand(cmd.Cmd):
                 else:
                     try:
                         value = int(value)
-                    except:
+                    except ValueError:
                         try:
                             value = float(value)
                         except ValueError:
-                            continue
+                            pass
                 new_dict[key] = value
         return new_dict
 
