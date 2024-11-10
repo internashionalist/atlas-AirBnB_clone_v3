@@ -105,9 +105,9 @@ def put_review(review_id):
     if data is None:
         abort(400, "Not a JSON")
 
+    excluded_keys = ["id", "user_id", "place_id", "created_at", "updated_at"]
     for key, value in data.items():
-        if key not in [
-            "id", "user_id", "place_id", "created_at", "updated_at"]:
+        if key not in excluded_keys:
             setattr(review, key, value)
 
     review.save()
