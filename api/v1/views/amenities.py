@@ -77,12 +77,19 @@ def put_amenity(amenity_id):
     updates an Amenity object
     """
     amenity = storage.get(Amenity, amenity_id)
-    if amenity is None:
+    if not amenity:
         abort(404)
-    if not request.get_json():
+
+    if not request.is_json:
         abort(400, "Not a JSON")
-    for key, value in request.get_json().items():
+
+    data = request.get_json()
+    if data is None:
+        abort(400, "Not a JSON")
+
+    for key, value in data.items():
         if key not in ["id", "created_at", "updated_at"]:
             setattr(amenity, key, value)
-    storage.save()
+
+    amenity.save()
     return jsonify(amenity.to_dict()), 200
