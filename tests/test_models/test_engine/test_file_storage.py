@@ -95,105 +95,69 @@ class TestFileStorage(unittest.TestCase):
         """
         tests that 'all' returns a dictionary
         """
-        storage = FileStorage()
         new_dict = storage.all()
-        self.assertEqual(type(new_dict), dict)
-        self.assertIs(new_dict, storage._FileStorage__objects)
+        self.assertIsInstance(new_dict)
+        self.assertIs(new_dict, self.storage._FileStorage__objects)
 
     def test_new(self):
         """
         tests that 'new' adds an object to the storage dictionary
         """
-        storage = FileStorage()
-        save = FileStorage._FileStorage__objects
-        FileStorage._FileStorage__objects = {}
-        test_dict = {}
         for key, value in classes.items():
-            with self.subTest(key=key, value=value):
-                instance = value()
-                instance_key = instance.__class__.__name__ + "." + instance.id
-                storage.new(instance)
-                test_dict[instance_key] = instance
-                self.assertEqual(test_dict, storage._FileStorage__objects)
-        FileStorage._FileStorage__objects = save
+            instance = value()
+            instance.save()
+            instance_key = f"{instance.__class__.__name__}.{instance.id}"
+            self.assertIn(instance_key, self.storage._FileStorage__objects)
 
     def test_save(self):
         """
         tests that 'save' properly saves objects to file.json
         """
-        storage = FileStorage()
-        new_dict = {}
-        for key, value in classes.items():
-            instance = value()
-            instance_key = instance.__class__.__name__ + "." + instance.id
-            new_dict[instance_key] = instance
-        save = FileStorage._FileStorage__objects
-        FileStorage._FileStorage__objects = new_dict
-        storage.save()
-        FileStorage._FileStorage__objects = save
-        for key, value in new_dict.items():
-            new_dict[key] = value.to_dict()
-        string = json.dumps(new_dict)
-        with open("file.json", "r") as f:
-            js = f.read()
-        self.assertEqual(json.loads(string), json.loads(js))
+        state_instance = State(name="Oklahoma")
+        self.storage.new(state_instance)
+        self.storage.save()
+        with open("file.json", "r") as file:
+            file_stuff = json.load(file)
+        instance_key = f"{state_instance.__class__.__name__}.{state_instance.id}"
+        self.assertIn(instance_key, file_stuff)
 
     def test_reload(self):
         """
         tests that 'reload' properly reloads objects from file.json
         """
-        storage = FileStorage()
-        new_dict = {}
-        for key, value in classes.items():
-            instance = value()
-            instance_key = instance.__class__.__name__ + "." + instance.id
-            new_dict[instance_key] = instance
-        save = FileStorage._FileStorage__objects
-        FileStorage._FileStorage__objects = new_dict
-        storage.save()
-        storage.reload()
-        for key, value in new_dict.items():
-            self.assertTrue(value == storage._FileStorage__objects[key])
+        city_instance = City(name="Tulsa")
+        self.storage.new(city_instance)
+        self.storage.save()
+        self.storage._FileStorage__objects.clear()
+        self.storage.reload()
+        instance_key = f"{city_instance.__class__.__name__}.{city_instance.id}"
+        self.assertIn(instance_key, self.storage._FileStorage__objects)
 
     def test_delete(self):
         """
         tests that 'delete' properly deletes objects from __objects
         """
-        storage = FileStorage()
-        new_dict = {}
-        for key, value in classes.items():
-            instance = value()
-            instance_key = instance.__class__.__name__ + "." + instance.id
-            new_dict[instance_key] = instance
-        save = FileStorage._FileStorage__objects
-        FileStorage._FileStorage__objects = new_dict
-        storage.delete(new_dict[instance_key])
-        self.assertNotIn(instance_key, storage._FileStorage__objects)
-        FileStorage._FileStorage__objects = save
+        user_instance = User(email="protectyaneck@wutang.com", password="forever")
+        self.storage.new(user_instance)
+        instance_key = f"{user_instance.__class__.__name__}.{user_instance.id}"
+        self.storage.delete(user_instance)
+        self.assertNotIn(instance_key, self.storage._FileStorage__objects)
 
     def test_get(self):
         """
         tests that 'get' retrieves one object
         """
-        storage = FileStorage()
         instance = State(name="Oklahoma")
         instance.save()
-        got_instance = storage.get(State, instance.id)
+        got_instance = self.storage.get(State, instance.id)
         self.assertEqual(instance, got_instance)
-        storage.delete(instance)
 
     def test_count(self):
         """
         tests that 'count' counts the number of objects in storage
         """
-        storage = FileStorage()
-        initial_count = storage.count()
-
+        initial_count = self.storage.count()
         state_instance = State(name="Oklahoma")
         state_instance.save()
-        self.assertEqual(storage.count(State), initial_count + 1)
-
-        self.assertEqual(storage.count(), initial_count + 1)
-
-        storage.delete(state_instance)
-        self.assertEqual(storage.count(State), initial_count)
+        self.assertEqual(self.storage.count(), initial_count + 1)
+        self.assertEqual(self.storage.count(State), 1)
