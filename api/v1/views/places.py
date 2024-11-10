@@ -83,7 +83,7 @@ def post_place(city_id):
     place = Place(**data)
     place.city_id = city_id
     place.save()
-    return jsonify(place.to_dict())
+    return jsonify(place.to_dict()), 201
 
 
 @app_views.route("/places/<place_id>", methods=["PUT"],
