@@ -53,7 +53,7 @@ def post_state():
     """
     creates a State object
     """
-    if not request.is_json():
+    if not request.is_json:
         abort(400, "Not a JSON")
 
     data = request.get_json()
