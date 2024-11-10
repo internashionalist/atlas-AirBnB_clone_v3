@@ -53,13 +53,15 @@ def post_state():
     """
     creates a State object
     """
-    if not request.get_json():
+    if not request.is_json():
         abort(400, "Not a JSON")
-    if request.get_json() is None:
+
+    data = request.get_json()
+    if data is None:
         abort(400, "Not a JSON")
-    if "name" not in request.get_json():
+    if "name" not in data:
         abort(400, "Missing name")
-    new_state = State(**request.get_json())
+    new_state = State(**data)
     new_state.save()
     return jsonify(new_state.to_dict()), 201
 
