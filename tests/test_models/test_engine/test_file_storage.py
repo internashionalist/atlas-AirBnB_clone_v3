@@ -181,4 +181,4 @@ class TestFileStorage(unittest.TestCase):
         FileStorage._FileStorage__objects = save
         self.assertEqual(storage.count(value), 0)
         self.assertEqual(storage.count(None), len(new_dict))
-            
+ 
