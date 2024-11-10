@@ -55,6 +55,8 @@ def post_state():
     """
     if not request.get_json():
         abort(400, "Not a JSON")
+    if request.get_json() is None:
+        abort(400, "Not a JSON")
     if "name" not in request.get_json():
         abort(400, "Missing name")
     new_state = State(**request.get_json())
