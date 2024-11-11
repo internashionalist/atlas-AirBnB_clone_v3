@@ -61,9 +61,9 @@ class TestFileStorageDocs(unittest.TestCase):
         """
         tests for the presence of a docstring in the module
         """
-        self.assertIsNot(file_storage.__doc__, None,
+        self.assertIsNot(FileStorage.__doc__, None,
                          "file_storage.py needs a docstring")
-        self.assertTrue(len(file_storage.__doc__) >= 1,
+        self.assertTrue(len(FileStorage.__doc__) >= 1,
                         "file_storage.py needs a docstring")
 
     def test_file_storage_class_docstring(self):
@@ -109,7 +109,7 @@ class TestFileStorage(unittest.TestCase):
         """
         tests that 'all' returns a dictionary
         """
-        new_dict = storage.all()
+        new_dict = self.storage.all()
         self.assertIsInstance(new_dict)
         self.assertIs(new_dict, self.storage._FileStorage__objects)
 
