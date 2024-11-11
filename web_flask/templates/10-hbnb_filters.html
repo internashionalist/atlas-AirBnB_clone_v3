@@ -1,55 +1,212 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
+<html>
+<head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="styles/4-common.css">
-    <link rel="stylesheet" href="styles/3-header.css">
-    <link rel="stylesheet" href="styles/3-footer.css">
-    <link rel="stylesheet" href="styles/6-filters.css">
-    <link rel="icon" href="images/icon.png" type="image/png">
-    <title>AirBnb Clone</title>
-  </head>
-  <body>
+    <title>AirBnB Clone</title>
+    <link rel="stylesheet" href="../static/styles/4-common.css">
+    <link rel="stylesheet" href="../static/styles/3-header.css">
+    <link rel="stylesheet" href="../static/styles/3-footer.css">
+    <link rel="stylesheet" href="../static/styles/6-filters.css">
+    <link rel="stylesheet" href="../static/styles/100-places.css">
+    <link rel="icon" href="../static/images/icon.png">
+</head>
+<body>
     <header>
-      <div class="logo">
-      </div>
+        <img src="../static/images/logo.png" alt="AirBnB Logo" class="logo">
     </header>
     <div class="container">
-      <section class="filters">
-        <div class="locations">
-          <h3>States</h3>
-          <h4>&nbsp;</h4>
-          <ul class="popover">
-	    {% for state in states|sort(attribute='name') %}
-              <li>
-                <h2>{{ state.name }}:</h2>
-                <ul>
-		  {% for city in state.cities|sort(attribute='name') %}
-                    <li>{{ city.name }}</li>
-		  {% endfor %}
+        <section class="filters">
+            <button>Search</button>
+            <div class="locations">
+                <h3>States</h3>
+                <h4>&nbsp;</h4>
+                <ul class="popover">
+                    {% for state in states|sort(attribute="name") %}
+                    <li>
+                        <h2>{{ state.name }}</h2>
+                        <ul>
+                            {% for city in state.cities|sort(attribute="name") %}
+                            <li>
+                                {{ city.name }}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                    {% endfor %}
                 </ul>
-              </li>
-	    {% endfor %}
-          </ul>
-        </div>
-        <div class="amenities">
-          <h3>Amenities</h3>
-          <h4>&nbsp;</h4>
-          <ul class="popover">
-	    {% for amenity in amenities|sort(attribute='name') %}
-              <li>{{ amenity.name }}</li>
-	    {% endfor %}
-          </ul>
-        </div>
-        <button>
-          Search
-        </button>
-      </section>
+            </div>
+            <div class="amenities">
+                <h3>Amenities</h3>
+                <h4>&nbsp;</h4>
+                <ul class="popover">
+                    {% for amenity in amenities|sort(attribute="name") %}
+                    <li>
+                        {{ amenity.name }}
+                    </li>
+                    {% endfor %}
+            </div>
+        </section>
+        <section class="places">
+            <h1>Places</h1>
+            <article>
+                <h2>Magic Castle</h2>
+                <div class="price_by_night">
+                    $200
+                </div>
+                <div class="information">
+                    <div class="max_guest">
+                        50 Guests
+                    </div>
+                    <div class="number_rooms">
+                        25 Bedroom
+                    </div>
+                    <div class="number_bathrooms">
+                        10 Bathroom
+                    </div>
+                </div>
+                <div class="user">
+                    <b>Owner:</b> Prince Adam
+                </div>
+                <div class="description">
+                    <p> This castle has everything: a staffed kitchen, convenient location atop a mountain,
+                        even a green tiger! Its skull-shaped entrance invites you to a world of magic and wonder.
+                    </p>
+                </div>
+                <div class="amenities">
+                    <h2>Amenities</h2>
+                    <ul>
+                        <li>
+                            <div class="places_amenities_petfriendly"></div>
+                            Pet-Friendly
+                        </li>
+                        <li>
+                            <div class="places_amenities_tv"></div>
+                            Television
+                        </li>
+                        <li>
+                            <div class="places_amenities_wifi"></div>
+                            WiFi
+                        </li>
+                    </ul>
+                </div>
+                <div class="reviews">
+                    <h2>2 Reviews</h2>
+                    <ul>
+                        <li>
+                            <h3>From Jason & Ashley</h3>
+                            <p>We're pretty sure Adam is He-Man.</p>
+                        </li>
+                        <li>
+                            <h3>S. Keletor</h3>
+                            <p>This castle shall be mine! ...also the WiFi is sketchy!</p>
+                        </li>
+                    </ul>
+                </div>
+            </article>
+            <article>
+                <h2>Garbage Can</h2>
+                <div class="price_by_night">
+                    $99
+                </div>
+                <div class="information">
+                    <div class="max_guest">
+                        1 Guest
+                    </div>
+                    <div class="number_rooms">
+                        1 Bedroom
+                    </div>
+                    <div class="number_bathrooms">
+                        0 Bathroom
+                    </div>
+                </div>
+                <div class="user">
+                    <b>Owner:</b> Oscar
+                </div>
+                <div class="description">
+                    <p> It's a garbage can. You can sleep in it.
+                        It's not that bad. The smell is not that strong.
+                    </p>
+                </div>
+                <div class="amenities">
+                    <h2>Amenities</h2>
+                    <ul>
+                        <li>
+                            <div class="places_amenities_petfriendly"></div>
+                            Pet-Friendly
+                        </li>
+                    </ul>
+                </div>
+                <div class="reviews">
+                    <h2>1 Review</h2>
+                    <ul>
+                        <li>
+                            <h3>From Oscar</h3>
+                            <p>SCRAM!</p>
+                        </li>
+                    </ul>
+                </div>
+            </article>
+            <article>
+                <h2>Tree House</h2>
+                <div class="price_by_night">
+                    $10
+                </div>
+                <div class="information">
+                    <div class="max_guest">
+                        4 Guests
+                    </div>
+                    <div class="number_rooms">
+                        1 Bedroom
+                    </div>
+                    <div class="number_bathrooms">
+                        1 Bathroom
+                    </div>
+                </div>
+                <div class="user">
+                    <b>Owner:</b> Children
+                </div>
+                <div class="description">
+                    <p> This spacious arboreal abode is perfect for
+                        a family vacation. It has no kitchen, bean bags,
+                        and you can pee off the side. It is located in the
+                        heart of the forest / our backyard. Capri-Suns included.
+                    </p>
+                </div>
+                <div class="amenities">
+                    <h2>Amenities</h2>
+                    <ul>
+                        <li>
+                            <div class="places_amenities_petfriendly"></div>
+                            Pet-Friendly
+                        </li>
+                        <li>
+                            <div class="places_amenities_tv"></div>
+                            Television
+                        </li>
+                        <li>
+                            <div class="places_amenities_wifi"></div>
+                            Wifi
+                        </li>
+                    </ul>
+                </div>
+                <div class="reviews">
+                    <h2>2 Reviews</h2>
+                    <ul>
+                        <li>
+                            <h3>From Rashad & Vicki</h3>
+                            <p>We loved the aesthetic and comic books!</p>
+                        </li>
+                        <li>
+                            <h3>From Parents</h3>
+                            <p>Did strangers stay in our children's treehouse?!</p>
+                        </li>
+                    </ul>
+                </div>
+            </article>
+        </section>
     </div>
     <footer>
-      <p>
-        Holberton School
-      </p>
+        <p>Atlas School</p>
     </footer>
-  </body>
+</body>
 </html>
