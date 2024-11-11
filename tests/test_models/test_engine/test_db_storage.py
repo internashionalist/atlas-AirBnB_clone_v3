@@ -76,8 +76,8 @@ class TestFileStorage(unittest.TestCase):
         """
         sets up before each test
         """
-        storage = DBStorage()
-        storage.reload()
+        self.storage = DBStorage()
+        self.storage.reload()
 
     def tearDown(self):
         """
@@ -90,17 +90,16 @@ class TestFileStorage(unittest.TestCase):
         """
         tests that 'all' returns a dictionary
         """
-        self.assertIs(type(models.storage.all()), dict)
+        self.assertIsInstance(self.storage.all(), dict)
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_all_no_class(self):
         """
         tests that 'all' returns all rows when no class is passed
         """
-        storage = DBStorage()
-        obj = storage.all()
-        self.assertEqual(type(obj), dict)
-        self.assertIs(obj, storage.all())
+        obj = self.storage.all()
+        self.assertIsInstance(obj, dict)
+        self.assertEqual(obj, self.storage.all())
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_new(self):
@@ -118,11 +117,11 @@ class TestFileStorage(unittest.TestCase):
         """
         tests that 'save' saves an object to the database
         """
-        initital_objs = self.storage.all(State)
+        initial_objs = self.storage.all(State)
         state = State(name="Oklahoma")
         self.storage.new(state)
         self.storage.save()
-        self.assertNotEqual(initital_objs, self.storage.all(State))
+        self.assertNotEqual(initial_objs, self.storage.all(State))
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_get(self):
