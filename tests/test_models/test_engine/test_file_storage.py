@@ -85,12 +85,25 @@ class TestFileStorageDocs(unittest.TestCase):
             self.assertTrue(len(func[1].__doc__) >= 1,
                             "{:s} method needs a docstring".format(func[0]))
 
-
-@unittest.skipIf(models.storage_t == "db", "not testing file storage")
 class TestFileStorage(unittest.TestCase):
     """
     tests the FileStorage class
     """
+
+    def setUp(self):
+        """
+        clears storage before each test
+        """
+        self.storage = FileStorage()
+        self.storage._FileStorage__objects.clear()
+
+    def tearDown(self):
+        """
+        resets storage after each test
+        """
+        self.storage._FileStorage__objects.clear()
+
+    @unittest.skipIf(models.storage_t == "db", "not testing file storage")
     def test_all_returns_dict(self):
         """
         tests that 'all' returns a dictionary
@@ -99,6 +112,7 @@ class TestFileStorage(unittest.TestCase):
         self.assertIsInstance(new_dict)
         self.assertIs(new_dict, self.storage._FileStorage__objects)
 
+    @unittest.skipIf(models.storage_t == "db", "not testing file storage")
     def test_new(self):
         """
         tests that 'new' adds an object to the storage dictionary
@@ -109,6 +123,7 @@ class TestFileStorage(unittest.TestCase):
             instance_key = f"{instance.__class__.__name__}.{instance.id}"
             self.assertIn(instance_key, self.storage._FileStorage__objects)
 
+    @unittest.skipIf(models.storage_t == "db", "not testing file storage")
     def test_save(self):
         """
         tests that 'save' properly saves objects to file.json
@@ -121,6 +136,7 @@ class TestFileStorage(unittest.TestCase):
         instance_key = f"{st_instance.__class__.__name__}.{st_instance.id}"
         self.assertIn(instance_key, file_stuff)
 
+    @unittest.skipIf(models.storage_t == "db", "not testing file storage")
     def test_reload(self):
         """
         tests that 'reload' properly reloads objects from file.json
@@ -133,6 +149,7 @@ class TestFileStorage(unittest.TestCase):
         instance_key = f"{c_instance.__class__.__name__}.{c_instance.id}"
         self.assertIn(instance_key, self.storage._FileStorage__objects)
 
+    @unittest.skipIf(models.storage_t == "db", "not testing file storage")
     def test_delete(self):
         """
         tests that 'delete' properly deletes objects from __objects
@@ -143,6 +160,7 @@ class TestFileStorage(unittest.TestCase):
         self.storage.delete(u_instance)
         self.assertNotIn(instance_key, self.storage._FileStorage__objects)
 
+    @unittest.skipIf(models.storage_t == "db", "not testing file storage")
     def test_get(self):
         """
         tests that 'get' retrieves one object
@@ -152,6 +170,7 @@ class TestFileStorage(unittest.TestCase):
         got_instance = self.storage.get(State, instance.id)
         self.assertEqual(instance, got_instance)
 
+    @unittest.skipIf(models.storage_t == "db", "not testing file storage")
     def test_count(self):
         """
         tests that 'count' counts the number of objects in storage
