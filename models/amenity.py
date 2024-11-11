@@ -1,5 +1,7 @@
 #!/usr/bin/python
-""" holds class Amenity"""
+"""
+This module contains the Amenity class.
+"""
 import models
 from models.base_model import BaseModel, Base
 from os import getenv
@@ -9,7 +11,9 @@ from sqlalchemy.orm import relationship
 
 
 class Amenity(BaseModel, Base):
-    """Representation of Amenity """
+    """
+    defines the Amenity class
+    """
     if models.storage_t == 'db':
         __tablename__ = 'amenities'
         name = Column(String(128), nullable=False)
@@ -17,5 +21,7 @@ class Amenity(BaseModel, Base):
         name = ""
 
     def __init__(self, *args, **kwargs):
-        """initializes Amenity"""
+        """
+        initializes an Amenity instance
+        """
         super().__init__(*args, **kwargs)
