@@ -44,6 +44,7 @@ class DBStorage:
                                              HBNB_MYSQL_DB))
         if HBNB_ENV == "test":
             Base.metadata.drop_all(self.__engine)
+        self.reload()
 
     def all(self, cls=None):
         """
@@ -59,7 +60,7 @@ class DBStorage:
                 for obj in objs:
                     key = f"{obj.__class__.__name__}.{obj.id}"
                     new_dict[key] = obj
-        return (new_dict)
+        return new_dict
 
     def new(self, obj):
         """add the object to the current database session"""
