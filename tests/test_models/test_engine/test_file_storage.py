@@ -52,8 +52,8 @@ class TestFileStorageDocs(unittest.TestCase):
         """
         tests test conformity to PEP8"""
         pep8s = pep8.StyleGuide(quiet=True)
-        test_file_storage = 'tests/test_models/test_engine/test_file_storage.py'
-        result = pep8s.check_files([test_file_storage])
+        test_fs = 'tests/test_models/test_engine/test_file_storage.py'
+        result = pep8s.check_files([test_fs])
         self.assertEqual(result.total_errors, 0,
                          "Found code style errors (and warnings).")
 
