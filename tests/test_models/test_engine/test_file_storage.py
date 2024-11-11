@@ -113,34 +113,34 @@ class TestFileStorage(unittest.TestCase):
         """
         tests that 'save' properly saves objects to file.json
         """
-        state_instance = State(name="Oklahoma")
-        self.storage.new(state_instance)
+        st_instance = State(name="Oklahoma")
+        self.storage.new(st_instance)
         self.storage.save()
         with open("file.json", "r") as file:
             file_stuff = json.load(file)
-        instance_key = f"{state_instance.__class__.__name__}.{state_instance.id}"
+        instance_key = f"{st_instance.__class__.__name__}.{st_instance.id}"
         self.assertIn(instance_key, file_stuff)
 
     def test_reload(self):
         """
         tests that 'reload' properly reloads objects from file.json
         """
-        city_instance = City(name="Tulsa")
-        self.storage.new(city_instance)
+        c_instance = City(name="Tulsa")
+        self.storage.new(c_instance)
         self.storage.save()
         self.storage._FileStorage__objects.clear()
         self.storage.reload()
-        instance_key = f"{city_instance.__class__.__name__}.{city_instance.id}"
+        instance_key = f"{c_instance.__class__.__name__}.{c_instance.id}"
         self.assertIn(instance_key, self.storage._FileStorage__objects)
 
     def test_delete(self):
         """
         tests that 'delete' properly deletes objects from __objects
         """
-        user_instance = User(email="protectyaneck@wutang.com", password="forever")
-        self.storage.new(user_instance)
-        instance_key = f"{user_instance.__class__.__name__}.{user_instance.id}"
-        self.storage.delete(user_instance)
+        u_instance = User(email="suuu@wutang.com", password="forever")
+        self.storage.new(u_instance)
+        instance_key = f"{u_instance.__class__.__name__}.{u_instance.id}"
+        self.storage.delete(u_instance)
         self.assertNotIn(instance_key, self.storage._FileStorage__objects)
 
     def test_get(self):
