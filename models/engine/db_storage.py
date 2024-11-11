@@ -26,12 +26,16 @@ classes = {"Amenity": Amenity,
 
 
 class DBStorage:
-    """interaacts with the MySQL database"""
+    """
+    manages storage of hbnb models in a database
+    """
     __engine = None
     __session = None
 
     def __init__(self):
-        """Instantiate a DBStorage object"""
+        """
+        creates the engine self.__engine and session self.__session
+        """
         HBNB_MYSQL_USER = getenv('HBNB_MYSQL_USER')
         HBNB_MYSQL_PWD = getenv('HBNB_MYSQL_PWD')
         HBNB_MYSQL_HOST = getenv('HBNB_MYSQL_HOST')
@@ -47,7 +51,7 @@ class DBStorage:
 
     def all(self, cls=None):
         """
-        query on the current database session
+        returns a dictionary of all objects in the database
         """
         new_dict = {}
         if cls is not None:
@@ -62,20 +66,28 @@ class DBStorage:
         return new_dict
 
     def new(self, obj):
-        """add the object to the current database session"""
+        """
+        creates a new object in the database
+        """
         self.__session.add(obj)
 
     def save(self):
-        """commit all changes of the current database session"""
+        """
+        commits all changes of the current database session
+        """
         self.__session.commit()
 
     def delete(self, obj=None):
-        """delete from the current database session obj if not None"""
+        """
+        deletes obj from the current database session
+        """
         if obj is not None:
             self.__session.delete(obj)
 
     def reload(self):
-        """reloads data from the database"""
+        """
+        creates all tables and a new session
+        """
         Base.metadata.create_all(self.__engine)
         sess_factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
         Session = scoped_session(sess_factory)
@@ -91,7 +103,9 @@ class DBStorage:
             return None
 
     def count(self, cls=None):
-        """retrieves the number of objects in a class"""
+        """
+        counts the number of objects in storage of a certain class
+        """
         if cls is None:
             return sum(self.count(cls) for cls in classes.values())
         if cls in classes.values():
@@ -100,5 +114,7 @@ class DBStorage:
             return 0
 
     def close(self):
-        """call remove() method on the private session attribute"""
+        """
+        closes the current session
+        """
         self.__session.remove()
