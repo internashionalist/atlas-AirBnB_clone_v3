@@ -49,14 +49,14 @@ class DBStorage:
         """
         query on the current database session
         """
-        if self.__session is None:
-            self.reload()
-
         new_dict = {}
-        for class_name, class_type in classes.items():
-            if cls is None or cls is class_type:
-                objs = self.__session.query(class_type).all()
-                for obj in objs:
+        if cls is not None:
+            for obj in self.__session.query(cls):
+                key = "{}.{}".format(type(obj).__name__, obj.id)
+                new_dict[key] = obj
+        else:
+            for name, cls in classes.items():
+                for obj in self.__session.query(cls):
                     key = f"{obj.__class__.__name__}.{obj.id}"
                     new_dict[key] = obj
         return new_dict

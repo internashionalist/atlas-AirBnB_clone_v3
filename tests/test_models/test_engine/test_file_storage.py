@@ -96,7 +96,7 @@ class TestFileStorage(unittest.TestCase):
         clears storage before each test
         """
         self.storage = FileStorage()
-        self.storage._FileStorage__objects.clear()
+        self.storage._FileStorage__objects.clear() 
 
     def tearDown(self):
         """
