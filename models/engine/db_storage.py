@@ -51,8 +51,6 @@ class DBStorage:
         query on the current database session
         """
         new_dict = {}
-        if self.__session is None:
-            self.reload()
 
         for class_name, class_type in classes.items():
             if cls is None or cls is class_type:
