@@ -168,6 +168,7 @@ class TestFileStorage(unittest.TestCase):
         instance = State(name="Oklahoma")
         self.storage.new(instance)
         self.storage.save()
+        self.storage.reload()
         got_instance = self.storage.get(State, instance.id)
         self.assertEqual(instance, got_instance)
 
