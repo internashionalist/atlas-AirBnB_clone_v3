@@ -16,8 +16,13 @@ import sqlalchemy
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
-classes = {"Amenity": Amenity, "City": City,
-           "Place": Place, "Review": Review, "State": State, "User": User}
+classes = {"Amenity": Amenity,
+           "City": City,
+           "Place": Place,
+           "Review": Review,
+           "State": State,
+           "User": User
+           }
 
 
 class DBStorage:
@@ -72,9 +77,11 @@ class DBStorage:
         self.__session = Session
 
     def get(self, cls, id):
-        """retrieves one object"""
+        """
+        retrieves one object based on class and ID
+        """
         if cls in classes.values():
-            return self.__session.query(cls).get(id)
+            return self.__session.query(cls).filter_by(id=id).first()
         else:
             return None
 
