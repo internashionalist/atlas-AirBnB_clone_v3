@@ -54,6 +54,10 @@ class DBStorage:
         returns a dictionary of all objects in the database
         """
         new_dict = {}
+
+        if isinstance(cls, str):
+            cls = classes.get(cls)
+
         if cls is not None:
             for obj in self.__session.query(cls):
                 key = "{}.{}".format(type(obj).__name__, obj.id)
