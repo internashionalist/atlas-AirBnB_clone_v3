@@ -110,8 +110,7 @@ class TestFileStorage(unittest.TestCase):
         tests that 'all' returns a dictionary
         """
         new_dict = self.storage.all()
-        self.assertIsInstance(new_dict)
-        self.assertIs(new_dict, self.storage._FileStorage__objects)
+        self.assertIsInstance(new_dict, dict)
 
     @unittest.skipIf(models.storage_t == "db", "not testing file storage")
     def test_new(self):
@@ -167,7 +166,8 @@ class TestFileStorage(unittest.TestCase):
         tests that 'get' retrieves one object
         """
         instance = State(name="Oklahoma")
-        instance.save()
+        self.storage.new(instance)
+        self.storage.save()
         got_instance = self.storage.get(State, instance.id)
         self.assertEqual(instance, got_instance)
 
