@@ -46,13 +46,15 @@ class DBStorage:
             Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
-        """query on the current database session"""
+        """
+        query on the current database session
+        """
         new_dict = {}
         if self.__session is None:
             self.reload()
 
-        for clss in classes:
-            if cls is None or cls is classes[clss] or cls is clss:
+        for clss in classes.items():
+            if cls is None or cls is clss[1]:
                 objs = self.__session.query(classes[clss]).all()
                 for obj in objs:
                     key = obj.__class__.__name__ + '.' + obj.id
