@@ -48,6 +48,9 @@ class DBStorage:
     def all(self, cls=None):
         """query on the current database session"""
         new_dict = {}
+        if self.__session is None:
+            self.reload()
+
         for clss in classes:
             if cls is None or cls is classes[clss] or cls is clss:
                 objs = self.__session.query(classes[clss]).all()
