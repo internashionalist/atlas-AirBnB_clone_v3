@@ -78,13 +78,12 @@ class TestFileStorage(unittest.TestCase):
         """
         storage = DBStorage()
         storage.reload()
-        self.storage = storage
 
     def tearDown(self):
         """
         deletes the storage instance and the file.json after each test
         """
-        del self.storage
+        self.storage.close()
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_all_returns_dict(self):
@@ -108,34 +107,32 @@ class TestFileStorage(unittest.TestCase):
         """
         tests that 'new' adds an object to the database
         """
-        storage = DBStorage()
-        obj = storage.all(State)
+        initial_objs = self.storage.all(State)
         state = State(name="Oklahoma")
-        state.save()
-        self.assertIsNot(obj, storage.all(State))
+        self.storage.new(state)
+        self.storage.save()
+        self.assertNotEqual(initial_objs, self.storage.all(State))
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_save(self):
         """
         tests that 'save' saves an object to the database
         """
-        storage = DBStorage()
-        obj = storage.all(State)
+        initital_objs = self.storage.all(State)
         state = State(name="Oklahoma")
-        state.save()
-        storage.save()
-        storage.reload()
-        self.assertIsNot(obj, storage.all(State))
+        self.storage.new(state)
+        self.storage.save()
+        self.assertNotEqual(initital_objs, self.storage.all(State))
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_get(self):
         """
         tests that 'get' retrieves an object from storage
         """
-        storage = DBStorage()
         state = State(name="Oklahoma")
-        state.save()
-        obj = storage.get(State, state.id)
+        self.storage.new(state)
+        self.storage.save()
+        obj = self.storage.get(State, state.id)
         self.assertEqual(obj, state)
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
@@ -143,20 +140,19 @@ class TestFileStorage(unittest.TestCase):
         """
         tests that 'count' returns the number of objects in storage
         """
-        storage = DBStorage()
+        initial_count = self.storage.count(State)
         state = State(name="Oklahoma")
-        state.save()
-        count = storage.count(State)
-        self.assertEqual(count, 1)
-        storage.save()
+        self.storage.new(state)
+        self.storage.save()
+        self.assertEqual(self.storage.count(State), initial_count + 1)
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_delete(self):
         """
         tests that 'delete' deletes an object from storage
         """
-        storage = DBStorage()
         state = State(name="Oklahoma")
-        state.save()
-        storage.delete(state)
-        self.assertIsNone(storage.get(State, state.id))
+        self.storage.new(state)
+        self.storage.save()
+        self.storage.delete(state)
+        self.assertIsNone(self.storage.get(State, state.id))
