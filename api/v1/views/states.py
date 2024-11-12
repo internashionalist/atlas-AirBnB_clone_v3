@@ -51,12 +51,17 @@ def delete_state(state_id):
     deletes a State object
     """
     state = storage.get(State, state_id)
+    """get method to fetch a State with a specified state_id
+    from the storage object."""
     if state:
         storage.delete(state)
         storage.save()
         return jsonify({})
+        """If the State exists, the State is deleted and saved to storage.
+        Then, an empty json response is returned with jsonify({})"""
     else:
         abort(404)
+        """If the State doesn't exist, the request is aborted."""
 
 
 @app_views.route("/states", methods=["POST"],
@@ -67,16 +72,25 @@ def post_state():
     """
     if not request.is_json:
         abort(400, "Not a JSON")
+        """Checks if the request contains JSON data.
+        If not, request is aborted with 400 error message"""
 
     data = request.get_json()
     if data is None:
         abort(400, "Not a JSON")
     if "name" not in data:
         abort(400, "Missing name")
+        """get_json retrieves all of the json data.
+        If the data is none or is missing a State Name,
+        request is aborted with a 400 error message."""
 
     new_state = State(**data)
     new_state.save()
     return jsonify(new_state.to_dict()), 201
+    """A new_state object is created using the data provided.
+    save() saves new_state. Then its converted to a dictionary
+    and returned as a JSON response with return jsonfiy.
+    A 201 message is appear, indicating a successfull creation."""
 
 
 @app_views.route("/states/<state_id>", methods=["PUT"],
