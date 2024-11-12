@@ -15,13 +15,17 @@ from models.user import User
 
 @app_views.route("/status")
 def status():
-    """ returns the status of the API """
+    """
+    returns the status of the API
+    """
     return jsonify({"status": "OK"})
 
 
 @app_views.route("/stats")
 def stats():
-    """ returns the STATS of the API """
+    """
+    returns the STATS of the API
+    """
     classes = {
         "amenities": Amenity,
         "cities": City,
