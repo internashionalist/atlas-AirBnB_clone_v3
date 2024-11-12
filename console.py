@@ -110,7 +110,9 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
 
     def do_destroy(self, arg):
-        """Deletes an instance based on the class and id"""
+        """
+        deletes an instance based on class name and id
+        """
         args = shlex.split(arg)
         if len(args) == 0:
             print("** class name missing **")
@@ -143,9 +145,12 @@ class HBNBCommand(cmd.Cmd):
 
     def do_update(self, arg):
         """
-        updates an instance based on class name, id, attribute & value"""
+        updates an instance based on class name, id, attribute & value
+        """
         args = shlex.split(arg)
-        integers = ["number_rooms", "number_bathrooms", "max_guest",
+        integers = ["number_rooms",
+                    "number_bathrooms",
+                    "max_guest",
                     "price_by_night"]
         floats = ["latitude", "longitude"]
         if len(args) == 0:
