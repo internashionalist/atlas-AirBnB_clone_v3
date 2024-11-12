@@ -109,17 +109,29 @@ def put_user(user_id):
     user = storage.get(User, user_id)
     if not user:
         abort(404)
+        """Using a get method to fetch User with a specified
+        user_id from Storage object. If the user does not exist,
+        request aborted and 404 message appears."""
 
     if not request.is_json:
         abort(400, "Not a JSON")
+        """is_json checks if the request contains JSON data.
+        If no JSON data, request aborted with 400 error message"""
 
     data = request.get_json()
     if data is None:
         abort(400, "Not a JSON")
+        """get_json retrieves the JSON data. If there is no data,
+        request aborted"""
 
     for key, value in data.items():
         if key not in ["id", "email", "created_at", "updated_at"]:
             setattr(user, key, value)
+            """iterates through the data dictionary and updates
+            the keys that are not id, email, created_at, updated_at.
+            setattr dynamically updates the user object's attributes"""
 
     user.save()
     return jsonify(user.to_dict())
+    """save() saves the updated user object and returns the
+    updated details in JSON format with to_dict() and jsonify"""
