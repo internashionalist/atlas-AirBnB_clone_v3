@@ -51,7 +51,8 @@ def delete_user(user_id):
     deletes a User object
     """
     user = storage.get(User, user_id)
-    """get method to fetch a User with a specified user_id from the storage object."""
+    """get method to fetch a User with a specified user_id
+    from the storage object."""
     if user:
         storage.delete(user)
         storage.save()
@@ -95,7 +96,7 @@ def post_user():
     return jsonify(user.to_dict()), 201
     """if all the required data is present, a new User is created
     with User(**data), then the User is saved to storage with save().
-    The user object is then converted to a dictionary and returned 
+    The user object is then converted to a dictionary and returned
     as a JSON response. A 201 status message will appear to show a
     successfull User creation."""
 
