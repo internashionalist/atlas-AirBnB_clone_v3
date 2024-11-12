@@ -56,9 +56,9 @@ def delete_user(user_id):
         storage.delete(user)
         storage.save()
         return jsonify({})
-        """if user exists, the delete method is used to delete the user,
-        then the save method saves the changes to storage. Then an empty
-        JSON respsone is returned {}"""
+    """if user exists, the delete method is used to delete the user,
+    then the save method saves the changes to storage. Then an empty
+    JSON respsone is returned {}"""
     else:
         abort(404)
 
