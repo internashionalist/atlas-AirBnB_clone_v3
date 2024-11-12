@@ -1,5 +1,7 @@
 #!/usr/bin/python3
-""" API Status """
+"""
+This module starts a Flask web application.
+"""
 from api.v1.views import app_views
 from flask import Flask, jsonify, make_response
 from flask_cors import CORS
@@ -14,13 +16,17 @@ CORS(app, resources={r"/*": {"origins": "0.0.0.0"}})
 
 @app.teardown_appcontext
 def teardown_db(exception):
-    """ closes database session"""
+    """
+    closes the storage session after each request
+    """
     storage.close()
 
 
 @app.errorhandler(404)
 def not_found_404(error):
-    """ displays 404 error """
+    """
+    returns a JSON-formatted 404 status code response
+    """
     return (jsonify({"error": "Not found"}), 404)
 
 
