@@ -71,20 +71,33 @@ def post_user():
     """
     if not request.is_json:
         abort(400, "Not a JSON")
+        """is_Json Checks if the request contains JSON data.
+        If there is no JSON data, the request is aborted
+        and a 400 error code with message"""
 
     data = request.get_json()
     if data is None:
         abort(400, "Not a JSON")
+        """get_json retrieves JSON data from the request.
+        If there is no data, request is aborted and 400
+        error messages appears."""
 
     if "email" not in data:
         abort(400, "Missing email")
 
     if "password" not in data:
         abort(400, "Missing password")
+        """if either 'email' or 'password' is missing from the JSON data,
+        the request is aborted and 400 error message will appear."""
 
     user = User(**data)
     user.save()
     return jsonify(user.to_dict()), 201
+    """if all the required data is present, a new User is created
+    with User(**data), then the User is saved to storage with save().
+    The user object is then converted to a dictionary and returned 
+    as a JSON response. A 201 status message will appear to show a
+    successfull User creation."""
 
 
 @app_views.route("/users/<user_id>", methods=["PUT"],
