@@ -16,7 +16,12 @@ def get_all_states():
     retrieves list of all State objects
     """
     states_json = [state.to_dict() for state in storage.all(State).values()]
+    """creates a list of dictionaries called states_json.
+    Iterates through all State objects in storage.all(State.values(),
+    to_dict converts each State into a dictionary and adds it
+    to states_json list.)"""
     return jsonify(states_json)
+    """jsonify turns the states_json list into a JSON response"""
 
 
 @app_views.route("/states/<state_id>", methods=["GET"],
@@ -26,10 +31,17 @@ def get_state_id(state_id):
     retrieves a State object by id
     """
     state = storage.get(State, state_id)
+    """Using get method to fetch a State object with a
+    specified state_id"""
     if state:
         return jsonify(state.to_dict())
+        """If the state exists, its converted into a dictionary
+        using to_dict(), then returned as a JSON response using
+        jsonify."""
     else:
         abort(404)
+        """if the state doesn't exist, the request is aborted
+        with a 404 error message appearing"""
 
 
 @app_views.route("/states/<state_id>", methods=["DELETE"],
