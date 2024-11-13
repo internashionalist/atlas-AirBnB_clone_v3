@@ -70,7 +70,7 @@ def delete_review(review_id):
         return jsonify({}), 200
         """if the review object exists, it is deleted.
         save() saves the deletion in storage.
-        jsonify({}) returns an empty JSON response with a 
+        jsonify({}) returns an empty JSON response with a
         200 status message indicating successful deletion
         """
     else:
