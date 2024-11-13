@@ -20,13 +20,25 @@ def get_all_places(city_id):
     retrieves list of all Place objects of a City
     """
     city = storage.get(City, city_id)
+    """Fetches City from storage with a
+    specified city_id"""
     if city:
         places_json = []
+        """if City exists, initialize an empty list
+        called places_json to store places objects in
+        JSON format."""
         for place in city.places:
             places_json.append(place.to_dict())
+            """iterates through all Place objects that are
+            associated with City, the converts them into
+            dictionaries and appends it to the places_json
+            list."""
         return jsonify(places_json)
+        """The places_json list is returned as a JSON response"""
     else:
         abort(404)
+        """If the city was not found, abort the request
+        with a 404 error message."""
 
 
 @app_views.route("/places/<place_id>", methods=["GET"],
@@ -36,10 +48,17 @@ def get_place_id(place_id):
     retrieves a Place object by id
     """
     place = storage.get(Place, place_id)
+    """using a get method, fetches a Place object with a
+    specified place_id."""
     if place:
         return jsonify(place.to_dict())
+        """If the place object exists, it is converted
+        into a dictionary using to_dict(), then returned
+        as a JSON response with jsonify."""
     else:
         abort(404)
+        """If place doesn't exist, abort request with 404
+        error message."""
 
 
 @app_views.route("/places/<place_id>", methods=["DELETE"],
@@ -49,10 +68,15 @@ def delete_place(place_id):
     deletes a Place object by id
     """
     place = storage.get(Place, place_id)
+    """fetch Place using get method with a specified
+    place_id."""
     if place:
         storage.delete(place)
         storage.save()
         return jsonify({})
+        """if Place exists, delete method delets the place.
+        Then, the deletion is saved in Storage.
+        jsonify{} returns an empty JSON response"""
     else:
         abort(404)
 
