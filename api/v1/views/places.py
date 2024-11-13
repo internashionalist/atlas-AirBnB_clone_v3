@@ -183,7 +183,7 @@ def post_places_search():
     """get_json retrieves the JSON data from the request.
     now it will just be called data."""
     places_json = []
-        """initializing an empty list to store Place objects in JSON format."""
+    """initializing an empty list to store Place objects in JSON format."""
     if "states" in data:
         for state_id in data["states"]:
             state = storage.get(State, state_id)
