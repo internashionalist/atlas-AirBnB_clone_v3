@@ -19,6 +19,9 @@ def status():
     returns the status of the API
     """
     return jsonify({"status": "OK"})
+    """creates a JSON response with a single key_value pair status: OK.
+    The jsonify converts the dictionary into a JSON response that indicates
+    the API is opertational"""
 
 
 @app_views.route("/stats")
@@ -39,3 +42,10 @@ def stats():
     for key, cls in classes.items():
         stats_dict[key] = storage.count(cls)
     return jsonify(stats_dict)
+    """classes = dictionary 
+    stats_dict is initialized as an empty dictionary that stores
+    the counts of each resource type
+    iterating through the items in the classes dictionary. For
+    each key-value pair (key, cls) it uses the count() method to count
+    the number of instances of cls and stores the restult in stats_dict.
+    stats_dict is then converted into a JSON response and returned"""
