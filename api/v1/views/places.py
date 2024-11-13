@@ -88,11 +88,17 @@ def post_place(city_id):
     creates a Place object
     """
     city = storage.get(City, city_id)
+    """Using get method to fetch a City with a
+    specified city_id"""
     if not city:
         abort(404)
+        """Abort request with 404 error message if
+        city doesn't exist."""
 
     if not request.is_json:
         abort(400, "Not a JSON")
+        """is_json checks if the request contains
+        JSON data. """
 
     data = request.get_json()
     if "user_id" not in data:
@@ -103,11 +109,20 @@ def post_place(city_id):
 
     if "name" not in data:
         abort(400, "Missing name")
+        """get_json retrieves the JSON data.
+        Then, it checks for user_id and name.
+        If user_id is missing, 400 error. Another
+        check if the User associated with the user_id
+        exists."""
 
     place = Place(**data)
     place.city_id = city_id
     place.save()
     return jsonify(place.to_dict()), 201
+    """Place(**data) creates a new Place object using the data provided.
+    The city_id is set for the Place object. save() saves the new Place.
+    the new details are returned as JSON response, and a 201 message
+    appears to indicate successful creation."""
 
 
 @app_views.route("/places/<place_id>", methods=["PUT"],
@@ -117,22 +132,40 @@ def put_place(place_id):
     updates a Place object
     """
     place = storage.get(Place, place_id)
+    """Fetches a place with a get method using a specified
+    place_id"""
     if not place:
         abort(404)
+        """If Place doesn't exist, abort request
+        with a 404 error message."""
 
     if not request.is_json:
         abort(400, "Not a JSON")
+        """is_json checks if the request
+        contains JSON data. If not, abort rquest
+        with a 400 error message."""
 
     data = request.get_json()
     if data is None:
         abort(400, "Not a JSON")
+        """get_json() retrieves the JSON data.
+        if there is no data, abort request with
+        an error message"""
     excluded_keys = ["id", "user_id", "city_id", "created_at", "updated_at"]
+    """excluded_keys will be keys that we want to ignore later/ protect
+    the values from being updated."""
     for key, value in data.items():
         if key not in excluded_keys:
             setattr(place, key, value)
+            """iterates through the key-values in the data dictionary.
+            If the key is not in excluded_keys, it is updated using
+            setattr()"""
 
     place.save()
     return jsonify(place.to_dict())
+    """save() saves the updated place.
+    the new place object is converted into a dictionary using to_dict()
+    the, returned as a JSON response using jsonify"""
 
 
 @app_views.route("/places_search", methods=["POST"],
