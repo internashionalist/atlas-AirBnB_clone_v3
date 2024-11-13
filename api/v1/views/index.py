@@ -42,7 +42,7 @@ def stats():
     for key, cls in classes.items():
         stats_dict[key] = storage.count(cls)
     return jsonify(stats_dict)
-    """classes = dictionary 
+    """classes = dictionary
     stats_dict is initialized as an empty dictionary that stores
     the counts of each resource type
     iterating through the items in the classes dictionary. For
