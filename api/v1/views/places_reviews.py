@@ -105,7 +105,6 @@ def post_review(place_id):
 
     if "user_id" not in data:
         abort(400, "Missing user_id")
-        
 
     if "text" not in data:
         abort(400, "Missing text")
