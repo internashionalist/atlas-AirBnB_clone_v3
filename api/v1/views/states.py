@@ -102,14 +102,24 @@ def put_state(state_id):
     state = storage.get(State, state_id)
     if not state:
         abort(404)
+        """Using a get method to fetch a State object
+        with a specified state_id from Storage.
+        If State doesn't exist, request aborted."""
 
     if not request.is_json:
         abort(400, "Not a JSON")
+        """is_json checks if the request contains JSON data.
+        If no JSON data, abort request with error message."""
 
     data = request.get_json()
     for key, value in data.items():
         if key not in ["id", "created_at", "updated_at"]:
             setattr(state, key, value)
+            """Iterates through the data dictionary and updates
+            the State object with values excluding id,
+            created_at, updated_at."""
 
     state.save()
     return jsonify(state.to_dict())
+    """save() saves the updated State.
+    Then the updated details are returned in JSON format."""
