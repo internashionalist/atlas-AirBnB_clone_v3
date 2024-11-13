@@ -176,10 +176,14 @@ def post_places_search():
     """
     if not request.is_json:
         abort(400, "Not a JSON")
+        """is_json checks if the request contains JSON data.
+        Request is aborted if not"""
 
     data = request.get_json()
-
+    """get_json retrieves the JSON data from the request.
+    now it will just be called data."""
     places_json = []
+        """initializing an empty list to store Place objects in JSON format."""
     if "states" in data:
         for state_id in data["states"]:
             state = storage.get(State, state_id)
@@ -187,6 +191,12 @@ def post_places_search():
                 for city in state.cities:
                     for place in city.places:
                         places_json.append(place.to_dict())
+                        """checks if states is present in the JSON data.
+                        if so, iterates through each state_id and fetches
+                        the corresponding State object, and retrieves its
+                        Place objects through its City objects. Then,
+                        each Place object is converted to a dictionary
+                        and is appended to the places_json list."""
 
     if "cities" in data:
         for city_id in data["cities"]:
@@ -194,6 +204,11 @@ def post_places_search():
             if city:
                 for place in city.places:
                     places_json.append(place.to_dict())
+                    """checks if cities is in the JSON data.
+                    Iterates through each city_id, fetches the corresponding
+                    City object, and retrieves its Place objects. Each Place
+                    object is then converted to a dictionary with to_dict,
+                    then appended to the places_json list."""
 
     if "amenities" in data:
         for amenity_id in data["amenities"]:
@@ -201,5 +216,12 @@ def post_places_search():
             if amenity:
                 for place in amenity.places:
                     places_json.append(place.to_dict())
+                    """checks if amenities is in the JSON data.
+                    Iterates through each amenitiy_id, fetches the
+                    corresponding Amenity object, and retrieves its
+                    Place objects. The Place object is then converted
+                    into a dictionary and appended to the places_json list."""
 
     return jsonify(places_json)
+    """The places_json list is returned as a JSON response
+    using jsonify()."""
